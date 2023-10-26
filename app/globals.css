@@ -170,6 +170,10 @@ body::-webkit-scrollbar-thumb:hover{
   justify-content: space-between;
 }
 
+.product__title{
+  min-width: 250px;
+}
+
 .product__group{
   display: flex;
   width:fit-content;
