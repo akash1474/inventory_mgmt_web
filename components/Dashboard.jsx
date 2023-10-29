@@ -2,15 +2,33 @@ import Image from "next/image"
 import Product from '@/components/Product'
 import axios from 'axios'
 import React,{useState,useEffect,useRef} from 'react'
+import Filter from '@/components/Filter'
 
 const Dashboard=({data,setData,setCount})=>{
 
 	const [products, setProducts] = useState(null);
+	const [categories, setCategories] = useState(null);
 	const inputRef = useRef(null);
+	const categoryRef=useRef(null);
+
+	const getCategories=()=>{
+		axios.get(`http://localhost:7000/api/category/all?limit=50`).then((res)=>{
+			setCategories(res.data.doc);
+		}).catch(err=>{
+			console.error(err);
+		})
+	}
+
 
 
 	const getProducts=()=>{
-		axios.get("http://localhost:7000/api/product/all?limit=20").then((res)=>{
+		let filters="";
+		if(categoryRef.current.value!=="default"){
+			filters+=`&category=${categoryRef.current.value}`
+		}
+		console.log(filters)
+		axios.get(`http://localhost:7000/api/product/all?limit=50${filters}`).then((res)=>{
+			console.log(res.data.doc)
 			setProducts(res.data.doc);
 		}).catch(err=>{
 			console.error(err);
@@ -19,9 +37,9 @@ const Dashboard=({data,setData,setCount})=>{
 
 	useEffect(()=>{
 		if(!products) getProducts();
+		if(!categories) getCategories();
 	},[])
 
-	console.log(products);
 
 	const deleteProduct=(id)=>{
 		axios.delete(`http://localhost:7000/api/product/delete/${id}`).then((res)=>{
@@ -41,6 +59,15 @@ const Dashboard=({data,setData,setCount})=>{
 	return (
 		<div className="dashboard__container">
 			<p className="text-zinc-950 text-2xl">Products</p>
+			<div className="dashboard__filters h-10 mt-3">
+		        <label htmlFor="category" className="block mb-2 text-base font-bold font-base text-zinc-950">Filter:</label>
+				<select onChange={()=>getProducts()} ref={categoryRef} id="category" className="h-9 bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-70 p-1.5 capitalize">
+				  <option className="text-gray-900" value="default">None</option>
+				  {
+				  	categories ? categories.map((el)=><option key={el._id} className="text-gray-900 capitalize" value={el._id}>{el.name}</option>):null
+				  }
+				</select>
+			</div>
 			<div className="dashboard__products">
 			{
 				products ? products.map((el)=><Product setCount={setCount} setData={setData} key={el._id} data={el} setProducts={setProducts} products={products}  deleteFn={deleteProduct}/>) : null

@@ -55,7 +55,7 @@ const CategoryContainer=({setCount})=>{
 			</button>
 
 
-			<div className="bg-gray-50 border p-2.5">
+			<div className="bg-gray-50 overflow-auto border p-2.5">
 				<p className="text-xl font-bold text-zinc-950 mb-5">Categories</p>
 				{
 					categories ? categories.map((el)=>(<Category key={el._id} id={el._id} name={el.name} deleteFn={deleteCategory}/>)): null
@@ -70,7 +70,6 @@ const CategoryContainer=({setCount})=>{
 				type="button" className=" ml-auto text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-1 focus:outline-none focus:ring-indigo-300 font-medium rounded-md ml-2 text-sm px-3 py-2 text-center inline-flex items-center mr-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
 					<Image className="product_icons" src='/plus.svg' alt="Icon" width={20} height={20} />
 				</button>
-
 	        </div>
 			</div>
 

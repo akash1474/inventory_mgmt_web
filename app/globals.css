@@ -136,8 +136,16 @@ body::-webkit-scrollbar-thumb:hover{
   flex-direction:column;
   margin-top:20px;
   height:fit-content;
+  min-height: max;
+  overflow: auto;
 /*  background-color: teal;*/
 
+
+}
+
+.dashboard__filters{
+  display: flex;
+  align-items: center;
 }
 
 .dashboard__product_title{
